@@ -1,0 +1,25 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  bool_param: true
+  double_param: 0.46
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      bool_param: true
+      double_param: 0.46
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      id: 0
+      int_param: 57
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      size: 1
+      state: true
+      str_param: Hello World
+      type: ''
+    state: []
+  int_param: 57
+  size: 1
+  str_param: Hello World
+state: []

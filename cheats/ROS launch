@@ -1,0 +1,3 @@
+/in package directory create /launch directory and  .launch file in it
+roslaunch image_publisher cameras_params.launch
+roslaunch image_publisher image_pub.launch

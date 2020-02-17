@@ -1,0 +1,15 @@
+<launch>
+  <!-- set cameras parameters -->
+
+  <!-- you can set parameters in child namespaces -->
+  <param name="wg/childparam" value="a child namespace parameter" />
+
+  <group ns="upper">
+    <node pkg="image_publisher" name="my_streaming_publisher" type="turtlesim_node"/>
+  </group>
+
+  <group ns="side">
+    <node pkg="image_publisher" name="my_streaming_publisher" type="turtlesim_node"/>
+  </group>
+
+</launch>

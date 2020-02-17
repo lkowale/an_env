@@ -1,0 +1,7 @@
+camera:
+  upper:
+    name: upper
+    source: 0
+  side:
+    name: side
+    source: 1

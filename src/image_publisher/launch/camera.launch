@@ -1,0 +1,21 @@
+<launch>
+    <!--set parameters-->
+    <arg name="cam0_name" value="upper" />
+    <arg name="cam0_source" value="0" />
+    <arg name="cam1_name" value="side" />
+    <arg name="cam1_source" value="1" />
+   <!--upload camera paramters to parameter server-->
+    <rosparam subst_value="true">
+        camera:
+                $(arg cam0_name):
+                        name: $(arg cam0_name)
+                        source: $(arg cam0_source)
+                $(arg cam1_name):
+                        name: $(arg cam1_name)
+                        source: $(arg cam1_source)
+    </rosparam>
+    <node pkg="image_publisher" type="my_streaming_publisher" name="publisher_$(arg cam0_name)" output="screen"
+            args="$(arg cam0_name) $(arg cam0_source)"/>
+    <node pkg="image_publisher" type="my_streaming_publisher" name="publisher_$(arg cam1_name)" output="screen"
+            args="$(arg cam1_name) $(arg cam1_source)"/>
+</launch>

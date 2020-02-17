@@ -1,0 +1,5 @@
+export PATH="/home/aa/anaconda3/bin:$PATH"
+
+conda env list
+
+conda env remove -n ENV_NAME

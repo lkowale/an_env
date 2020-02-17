@@ -1,0 +1,9 @@
+<launch>
+    <!--load camera paramters from file to parameter server-->
+    <rosparam command="load" file="$(find image_publisher)/camera_parameters.yaml" />
+    <arg name="name" value="bar" />
+    <!--load camera paramters from file to parameter server-->
+    <node pkg="image_publisher" type="my_streaming_publisher" name="my_streaming_publisher"
+            args="$(arg camera/upper/name) $(arg camera/upper/value)"/>
+</launch>
+
