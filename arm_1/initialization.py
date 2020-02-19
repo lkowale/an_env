@@ -33,8 +33,6 @@ arm_joints = \
             },
     }
 
-cameras = {'upper': 0, 'side': 1}
-
 
 class ParametersServer:
 
@@ -45,7 +43,6 @@ class ParametersServer:
         # set default arm hardware interface parameters
         rospy.set_param('/robot/arm/hardware_interface/port', '/dev/ttyACM0')
         rospy.set_param('/robot/arm/hardware_interface/speed', 9600)
-        rospy.set_param('/robot/vision/cameras', cameras)
 
     @staticmethod
     def get_param(parameter):

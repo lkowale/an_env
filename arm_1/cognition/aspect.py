@@ -1,4 +1,4 @@
-from utils.utils import dictionary_from_list
+from ..utils.utils import dictionary_from_list
 import pandas as pd
 import cv2
 import numpy as np
@@ -12,9 +12,17 @@ class Aspect:
         self.aspect_rule = aspect_rule
         self.source = source
         self.name = self.source.name + '_' + self.aspect_rule.name
-        self.aspect_frame = []
+        self.occurrence_mask = []
+        # pd.DataFrame of contours found on occurance mask
         self.contours = []
         self.aspect_occurrences = None
+
+    def find_occurrences(self):
+        pass
+
+    def apply_rule(self):
+        # make actual occurance mask
+        self.occurrence_mask = self.aspect_rule.apply_rule(self.source.raw_image)
 
 
 class CameraAspect(Aspect):
@@ -24,11 +32,8 @@ class CameraAspect(Aspect):
         topic_name = "/camera_" + self.source.name + "/image/compressed_mouse_left"
         self.subscriber = rospy.Subscriber(topic_name, Point, self.set_mask_colour, queue_size=1)
 
-    def describe(self):
-        # mask plain_frame
-        plain_frame = self.source.plain_frame
-        self.aspect_frame = self.aspect_rule.apply_rule(plain_frame)
-        # find contours on aspect_frame
+    def update(self):
+        # find contours on occurrence_mask
         cnts = cv2.findContours(self.aspect_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         self.contours = cnts[1]
 
@@ -46,7 +51,7 @@ class AspectRule:
         pass
 
 
-class ColourTresholdRule(AspectRule):
+class ColourThresholdRule(AspectRule):
 
     def __init__(self, name):
         AspectRule.__init__(self, name)
@@ -56,8 +61,8 @@ class ColourTresholdRule(AspectRule):
         self.LAB_treshold_upper = np.zeros((3,), dtype=int)
         self.colour_delta = 15
 
-    def apply_rule(self, frame):
-        frame = cv2.GaussianBlur(frame, (5, 5), 0)
+    def apply_rule(self, raw_source_image):
+        frame = cv2.GaussianBlur(raw_source_image, (5, 5), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
         colour_lower = self.LAB_treshold_colour - self.colour_delta
         colour_lower[0] = 0

@@ -1,4 +1,4 @@
-from utils.utils import dictionary_from_list
+from ..utils.utils import dictionary_from_list
 import pandas as pd
 import cv2
 import numpy as np
@@ -39,8 +39,18 @@ class BaseObject(object):
             # fill aspect occurences dataframe
             aspect.aspect_occurrences = self.__class__.contours_to_dataframe(aspect.contours)
 
+    # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
     def get_aspect_occurrences(self):
-        return [aspect.aspect_occurrences for aspect in self.aspects]
+        # apply rules to source images
+        # get list of contours get from a mask
+        ret_dict = {}
+        for aspect in self.aspects:
+
+            ret_dict[aspect.name] = aspect.aspect_occurrences
+        return ret_dict
+
+    def
+
 
     @classmethod
     def describe_contour(cls, contour):
