@@ -44,9 +44,10 @@ class Cognition:
         pass
 
     # get aspect view positions
+    # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
     def get_clade_aspects_occurrences(self, clade_name):
         return self.clades[clade_name].get_aspects_occurrences()
-        # todo returns dictionary of pd.DataFrames {aspect_name:DataFrame}
+
 
     # not sure if its necessary - maybe better to update only needed clades?
     # # describe world through clades and its aspects

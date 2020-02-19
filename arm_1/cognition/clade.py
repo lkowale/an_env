@@ -26,6 +26,7 @@ class BaseObject(object):
     def __init__(self, name, aspects):
         self.name = name
         self.aspects = dictionary_from_list(aspects)
+        self.aspect_occurrences = {}
         self.occurrences = pd.DataFrame()
 
     def get_occurrences(self):
@@ -41,16 +42,19 @@ class BaseObject(object):
 
     # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
     def get_aspect_occurrences(self):
-        # apply rules to source images
-        # get list of contours get from a mask
         ret_dict = {}
         for aspect in self.aspects:
+            # apply rules to source images
+            aspect.aspect_rule()
+            # get list of contours get from a mask
+            aspect.find_contours()
+            # describe contours from each Aspect, put theme in dictionary
+            # todo construct dictionary of DataFrames that describes aspets contours
+            self.aspect_occurrences[aspect.name] = self.describe_contour(aspect.contours)
 
-            ret_dict[aspect.name] = aspect.aspect_occurrences
-        return ret_dict
+        return self.aspect_occurrences
 
     def
-
 
     @classmethod
     def describe_contour(cls, contour):
@@ -89,7 +93,7 @@ class Blob(BaseObject):
     @classmethod
     def get_parameters(cls):
         parent_value = super(Blob, cls).get_parameters()
-        value = parent_value + ['c_x', 'c_y', 'radius']
+        value = parent_value + cls.clade_parameters
         return value
 
 

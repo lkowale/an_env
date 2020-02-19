@@ -17,11 +17,11 @@ class Aspect:
         self.contours = []
         self.aspect_occurrences = None
 
-    def find_occurrences(self):
+    def find_contours(self):
         pass
 
     def apply_rule(self):
-        # make actual occurance mask
+        # make actual occurrance mask
         self.occurrence_mask = self.aspect_rule.apply_rule(self.source.raw_image)
 
 
@@ -32,9 +32,9 @@ class CameraAspect(Aspect):
         topic_name = "/camera_" + self.source.name + "/image/compressed_mouse_left"
         self.subscriber = rospy.Subscriber(topic_name, Point, self.set_mask_colour, queue_size=1)
 
-    def update(self):
+    def find_contours(self):
         # find contours on occurrence_mask
-        cnts = cv2.findContours(self.aspect_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = cv2.findContours(self.occurrence_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         self.contours = cnts[1]
 
     def set_mask_colour(self, ros_data):
@@ -55,18 +55,18 @@ class ColourThresholdRule(AspectRule):
 
     def __init__(self, name):
         AspectRule.__init__(self, name)
-        self.BGR_treshold_colour = np.zeros((3,), dtype=int)
-        self.LAB_treshold_colour = np.zeros((3,), dtype=int)
-        self.LAB_treshold_lower = np.zeros((3,), dtype=int)
-        self.LAB_treshold_upper = np.zeros((3,), dtype=int)
+        self.BGR_threshold_colour = np.zeros((3,), dtype=int)
+        self.LAB_threshold_colour = np.zeros((3,), dtype=int)
+        self.LAB_threshold_lower = np.zeros((3,), dtype=int)
+        self.LAB_threshold_upper = np.zeros((3,), dtype=int)
         self.colour_delta = 15
 
     def apply_rule(self, raw_source_image):
         frame = cv2.GaussianBlur(raw_source_image, (5, 5), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
-        colour_lower = self.LAB_treshold_colour - self.colour_delta
+        colour_lower = self.LAB_threshold_colour - self.colour_delta
         colour_lower[0] = 0
-        colour_upper = self.LAB_treshold_colour + self.colour_delta
+        colour_upper = self.LAB_threshold_colour + self.colour_delta
         colour_upper[0] = 255
         frame = cv2.inRange(frame, colour_lower, colour_upper)
         frame = cv2.erode(frame, None, iterations=2)
