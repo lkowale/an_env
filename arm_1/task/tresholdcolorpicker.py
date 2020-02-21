@@ -6,9 +6,6 @@ from dynamic_reconfigure.server import Server
 from ros_dyn_cfg import TresholdColorPickerConfig
 
 #todo there's need to be an adapter that takes aspect name and data to be applied to this adapter
-#todo rqt plugin be written
-
-
 class TresholdColorPicker(Task):
 
     def __init__(self, robot):

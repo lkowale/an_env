@@ -60,7 +60,6 @@ class InitializeRobot:
         # set cameras parameters
         call('./load_camera_ctrl.sh')
         ParametersServer.initialize()
-        rospy.init_node('/robot')
 
 
 if __name__ == '__main__':
