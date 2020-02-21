@@ -1,6 +1,6 @@
-from motion.motion import Motion
-from cognition.cognition import Cognition
-from initialization import *
+from ..motion.motion import Motion
+from ..cognition.cognition import Cognition
+from ..initialization import *
 
 
 class Robot:

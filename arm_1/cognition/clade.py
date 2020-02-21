@@ -22,52 +22,48 @@ class BaseObject(object):
 
     clade_parameters = []
 
-    # todo use metaclass to construct clade classes or/and use AspectParameters class
     def __init__(self, name, aspects):
         self.name = name
         self.aspects = dictionary_from_list(aspects)
-        self.aspect_occurrences = {}
+        self.aspect_occurrences = pd.DataFrame()
         self.occurrences = pd.DataFrame()
 
-    def get_occurrences(self):
-        # make sure occurrences are up to date
-        self.descirbe()
-        return self.occurrences
+    # def get_occurrences(self):
+    #     # make sure occurrences are up to date
+    #     self.descirbe()
+    #     return self.occurrences
 
-    def describe(self):
-        for aspect in self.aspects:
-            aspect.describe()
-            # fill aspect occurences dataframe
-            aspect.aspect_occurrences = self.__class__.contours_to_dataframe(aspect.contours)
+    # def describe(self):
+    #     for aspect in self.aspects:
+    #         aspect.describe()
+    #         # fill aspect occurences dataframe
+    #         aspect.aspect_occurrences = self.__class__.contours_to_dataframe(aspect.contours)
 
     # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
     def get_aspect_occurrences(self):
-        ret_dict = {}
         for aspect in self.aspects:
             # apply rules to source images
-            aspect.aspect_rule()
-            # get list of contours get from a mask
+            aspect.apply_rule()
+            # get list of contours from a mask
             aspect.find_contours()
             # describe contours from each Aspect, put theme in dictionary
-            # todo construct dictionary of DataFrames that describes aspets contours
-            self.aspect_occurrences[aspect.name] = self.describe_contour(aspect.contours)
+            self.aspect_occurrences[aspect.name] = self.contours_to_dataframe(aspect.contours)
 
         return self.aspect_occurrences
-
-    def
 
     @classmethod
     def describe_contour(cls, contour):
         return []
 
     @classmethod
-    def get_parameters(cls):
+    def get_param_names(cls):
         return []
 
+    # returns dataframe of aspect contours parametrization
     @classmethod
     def contours_to_dataframe(cls, contours_list):
-        values = [cls.describe_contour(contour) for contour in contours_list]
-        df = pd.DataFrame(values, columns=cls.get_parameters())
+        values = cls.contours_to_list(contours_list)
+        df = pd.DataFrame(values, columns=cls.get_param_names())
         return df
 
     @classmethod
@@ -91,8 +87,8 @@ class Blob(BaseObject):
         return value
 
     @classmethod
-    def get_parameters(cls):
-        parent_value = super(Blob, cls).get_parameters()
+    def get_param_names(cls):
+        parent_value = super(Blob, cls).get_param_names()
         value = parent_value + cls.clade_parameters
         return value
 
@@ -113,7 +109,7 @@ class RotatedRectangle(Blob):
         return value
 
     @classmethod
-    def get_parameters(cls):
-        parent_value = super(RotatedRectangle, cls).get_parameters()
-        value = parent_value + ['width', 'height', 'angle']
+    def get_param_names(cls):
+        parent_value = super(RotatedRectangle, cls).get_param_names()
+        value = parent_value + cls.clade_parameters
         return value

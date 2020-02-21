@@ -35,7 +35,7 @@ class Cognition:
 
     # get clade occurs absolute positions
     def get_clade_occurances(self, clade):
-        # make sure clade occurrences are up to date
+        # todo after position infere
         return self.clades[clade].get_occurances()
 
     # infere clade absolute position of its aspects positions
