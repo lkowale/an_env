@@ -38,11 +38,12 @@ class ParametersServer:
 
     @staticmethod
     def initialize():
-        # set default arm_joints parameters
-        rospy.set_param('/robot/arm', arm_joints)
-        # set default arm hardware interface parameters
-        rospy.set_param('/robot/arm/hardware_interface/port', '/dev/ttyACM0')
-        rospy.set_param('/robot/arm/hardware_interface/speed', 9600)
+        rospy.get_param_names()
+        # # set default arm hardware interface parameters
+        # rospy.set_param('/robot/arm/hardware_interface/port', '/dev/ttyACM0')
+        # rospy.set_param('/robot/arm/hardware_interface/speed', 9600)
+        # # set default arm_joints parameters
+        # rospy.set_param('/robot/arm', arm_joints)
 
     @staticmethod
     def get_param(parameter):
@@ -63,4 +64,6 @@ class InitializeRobot:
 
 
 if __name__ == '__main__':
+    # todo resolve initialization problem
+    rospy.init_node("ParameterServerInit")
     ParametersServer.initialize()
