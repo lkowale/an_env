@@ -1,4 +1,4 @@
-from initialization import *
+from ..initialization import *
 
 
 # todo robot should launch service that informs what kind of tasks its performs
@@ -20,8 +20,8 @@ class Task:
 
 class LimbMove(Task):
 
-    def __init__(self, robot, where_to):  # world position where_to
-        Task.__init__(robot)
+    def __init__(self, name, robot, where_to):  # world position where_to
+        Task.__init__(self, name, robot)
         self.where_to = where_to
         self.states = ['ready', 'busy', 'ended']
         self.state = 'ready'
@@ -41,7 +41,12 @@ class LimbMove(Task):
 
 class MoveToInitialPosition(LimbMove):
 
-    def __init__(self, robot):
+    def __init__(self, name, robot):
         where_to = ParametersServer.get_param("/robot/arm/initial_position")
-        LimbMove.__init__(self, robot, where_to)
+        LimbMove.__init__(self, name, robot, where_to)
 
+
+class CladeObserver(Task):
+
+    def update(self):
+        self.robot.cognition.get_clade_aspects_occurrences("red_ball")

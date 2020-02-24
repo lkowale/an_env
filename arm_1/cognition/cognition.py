@@ -35,13 +35,8 @@ class Cognition:
 
     # get clade occurs absolute positions
     def get_clade_occurances(self, clade):
-        # todo after position infere
+        # todo position infere
         return self.clades[clade].get_occurances()
-
-    # infere clade absolute position of its aspects positions
-    def clade_infere(self, clade_name):
-        # todo make clade objects positions inference
-        pass
 
     # get aspect view positions
     # returns dictionary of pd.DataFrames {aspect_name:DataFrame}

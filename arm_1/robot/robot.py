@@ -18,14 +18,4 @@ class Robot:
             self.current_task.update(self)
 
 # todo perform base taks - image subscirbers and aspects masks publishers
-def main_loop():
 
-    while True:
-        # get time to count fps later
-        timer = cv2.getTickCount()
-
-        # Calculate Frames per second (FPS)
-        fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord("q"):
-            break

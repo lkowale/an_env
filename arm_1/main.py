@@ -1,13 +1,14 @@
 from .robot.robot import Robot
-from .task import TaskManager
+from .task.manager import TaskManager
 import rospy
 
 
 class ArmRobot:
 
     def __init__(self):
-        rospy.init_node("arm_robot", anonymous=False)
         self.robot = Robot()
         self.tm = TaskManager(self.robot)
-        # service to show available Aspects
 
+
+if __name__ == '__main__':
+    arm1 = ArmRobot()
