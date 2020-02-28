@@ -49,4 +49,5 @@ class MoveToInitialPosition(LimbMove):
 class CladeObserver(Task):
 
     def update(self):
+        # todo describe path of clade occurences acquisition
         self.robot.cognition.get_clade_aspects_occurrences("red_ball")

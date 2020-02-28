@@ -14,7 +14,7 @@ class TaskManager:
             # get time to count fps later
             timer = cv2.getTickCount()
 
-            for name, task in self.tasks:
+            for name, task in self.tasks.items():
                 task.update()
 
             # Calculate Frames per second (FPS)

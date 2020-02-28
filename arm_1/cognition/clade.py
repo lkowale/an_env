@@ -40,15 +40,19 @@ class BaseObject(object):
     #         aspect.aspect_occurrences = self.__class__.contours_to_dataframe(aspect.contours)
 
     # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
-    def get_aspect_occurrences(self):
+    def get_aspect_occurrences(self, aspect_name):
+        aspect = self.aspects[aspect_name]
+        # apply rules to source images
+        aspect.apply_rule()
+        # get list of contours from a mask
+        aspect.find_contours()
+        # translate contours
+        return aspect.get_contours()
+
+    def get_aspects_occurrences(self):
         for aspect in self.aspects:
-            # apply rules to source images
-            aspect.apply_rule()
-            # get list of contours from a mask
-            aspect.find_contours()
             # describe contours from each Aspect, put theme in dictionary
             self.aspect_occurrences[aspect.name] = self.contours_to_dataframe(aspect.contours)
-
         return self.aspect_occurrences
 
     @classmethod

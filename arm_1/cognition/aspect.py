@@ -44,6 +44,9 @@ class CameraAspect(Aspect):
         bgr_colour = plain_frame[y, x]
         self.aspect_rule.set_colour(bgr_colour)
 
+    def get_contours(self):
+        return self.contours
+
 
 class AspectRule:
 
