@@ -6,7 +6,7 @@
     <arg name="cam1_source" value="1" />
    <!--upload camera paramters to parameter server-->
     <rosparam subst_value="true">
-        camera:
+        cameras:
                 $(arg cam0_name):
                         name: $(arg cam0_name)
                         source: $(arg cam0_source)

@@ -28,7 +28,7 @@ class Aspect:
 class CameraAspect(Aspect):
 
     def __init__(self, aspect_rule, source):
-        super(CameraAspect, self).__init__(self, aspect_rule, source)
+        super().__init__(aspect_rule, source)
         topic_name = "/camera_" + self.source.name + "/image/compressed_mouse_left"
         self.subscriber = rospy.Subscriber(topic_name, Point, self.set_mask_colour, queue_size=1)
 
@@ -47,14 +47,14 @@ class CameraAspect(Aspect):
 
 class AspectRule:
 
-    def __init__(self):
-        pass
+    def __init__(self, name):
+        self.name = name
 
 
 class ColourThresholdRule(AspectRule):
 
     def __init__(self, name):
-        AspectRule.__init__(self, name)
+        super().__init__(name)
         self.BGR_threshold_colour = np.zeros((3,), dtype=int)
         self.LAB_threshold_colour = np.zeros((3,), dtype=int)
         self.LAB_threshold_lower = np.zeros((3,), dtype=int)

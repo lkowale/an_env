@@ -61,8 +61,9 @@ class Sense:
 class ColorStereoVision(Sense):
 
     def __init__(self):
-        cameras = ParametersServer.get_param('camera')
-        self.eyes = {camera['name']: RosSubscriberEye(camera['name'], camera['source']) for camera in cameras}
+        cameras = ParametersServer.get_param('cameras')
+
+        self.eyes = {camera: RosSubscriberEye(camera, int(cameras[camera]['source'])) for camera in cameras}
 
 
 class Eye:

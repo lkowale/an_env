@@ -34,13 +34,13 @@ class image_feature:
         self.subscriber = rospy.Subscriber("/camera/image/compressed",
                                            CompressedImage, self.callback, queue_size=1)
         if VERBOSE:
-            print( "subscribed to /camera/image/compressed")
+            print("subscribed to /camera/image/compressed")
 
     def callback(self, ros_data):
         '''Callback function of subscribed topic.
         Here images get converted and features detected'''
         if VERBOSE:
-            print ('received image of type: "%s"' % ros_data.format)
+            print('received image of type: "%s"' % ros_data.format)
 
         #### direct conversion to CV2 ####
         np_arr = np.fromstring(ros_data.data, np.uint8)

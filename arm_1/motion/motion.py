@@ -1,30 +1,17 @@
-from utils.utils import *
-from motion.limb_interface import SerialLimbInterface
+from ..utils.utils import *
+from .limb_interface import SerialLimbInterface
 import threading
-from initialization import ParametersServer
+from ..initialization import ParametersServer
 
 
 class Motion:
 
     def __init__(self):
-        arm_joints_params = ParametersServer.get_param('/robot/arm')
-        port = ParametersServer.get_param('/robot/arm/hardware_interface/port')
-        speed = ParametersServer.get_param('/robot/arm/hardware_interface/speed')
+        arm_joints_params = ParametersServer.get_param('robot/arm')
+        port = ParametersServer.get_param('hardware_interface/port')
+        speed = ParametersServer.get_param('hardware_interface/speed')
         limb_interface = SerialLimbInterface(port, speed)
         self.arm = Limb('arm', limb_interface, arm_joints_params)
-
-
-        self.arm_joints = []
-        # 'shoulder':
-        #     {
-        #         'min': 0,
-        #         'max': 90,
-        #         'initial_position': 0,
-        #         'type': 'Servo'
-        #     },
-        for joint, params in arm_joints_params:
-            joint_type_class = globals()[params['type']]
-            self.arm_joints.append(joint_type_class(joint, params))
 
 
 class Limb:
@@ -35,9 +22,9 @@ class Limb:
     def __init__(self, name, hardware_interface, joints_params):
         self.name = name
         self.joints = []
-        for joint, params in joints_params:
+        for joint, params in joints_params.items():
             joint_type = globals()[params['type']]
-            self.arm_joints.append(joint_type(joint, params))
+            self.joints.append(joint_type(joint, params))
         self.hardware_interface = hardware_interface
         self.states = ['ready', 'busy']
         self.state = 'ready'
@@ -88,7 +75,7 @@ class DCMotor(Joint):
 class Servo(Joint):
 
     def __init__(self, name, params):
-        Joint.__init__(name, params)
+        super().__init__(name, params)
         self.move_speed_pdgree = self.params['move_speed_pdgree']
 
     def calculate_wait_time(self):

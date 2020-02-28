@@ -1,13 +1,14 @@
 import rospy
 from subprocess import call
 
+
 arm_joints = \
     {'torso':
         {
             'p_min': 0,
             'p_max': 1000,
             'initial_position': 0,
-            'type': 'DCmotor',
+            'type': 'DCMotor',
             'move_speed_pdgree': 8 
         },
         'shoulder':
@@ -15,21 +16,24 @@ arm_joints = \
                 'p_min': 0,
                 'p_max': 90,
                 'initial_position': 0,
-                'type': 'Servo'
+                'type': 'Servo',
+                'move_speed_pdgree': 8
             },
         'elbow':
             {
                 'p_min': 0,
                 'p_max': 90,
                 'initial_position': 0,
-                'type': 'Servo'
+                'type': 'Servo',
+                'move_speed_pdgree': 8
             },
         'gripper':
             {
                 'p_min': 0,
                 'p_max': 60,
                 'initial_position': 60,
-                'type': 'Servo'
+                'type': 'Servo',
+                'move_speed_pdgree': 8
             },
     }
 
@@ -38,12 +42,12 @@ class ParametersServer:
 
     @staticmethod
     def initialize():
-        rospy.get_param_names()
+        # rospy.get_param_names()
         # # set default arm hardware interface parameters
-        # rospy.set_param('/robot/arm/hardware_interface/port', '/dev/ttyACM0')
-        # rospy.set_param('/robot/arm/hardware_interface/speed', 9600)
+        rospy.set_param('/hardware_interface/port', '/dev/ttyACM0')
+        rospy.set_param('/hardware_interface/speed', 9600)
         # # set default arm_joints parameters
-        # rospy.set_param('/robot/arm', arm_joints)
+        rospy.set_param('robot/arm', arm_joints)
 
     @staticmethod
     def get_param(parameter):
@@ -65,5 +69,6 @@ class InitializeRobot:
 
 if __name__ == '__main__':
     # todo resolve initialization problem
+
     rospy.init_node("ParameterServerInit")
     ParametersServer.initialize()
