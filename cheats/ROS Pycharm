@@ -6,4 +6,6 @@ file .env content
 ROS_ROOT=/opt/ros/kinetic/share/ros
 ROS_MASTER_URI=http://localhost:11311
 ROS_PACKAGE_PATH=/home/aa/an_env/src:/home/aa/image_transport_ws/src:/opt/ros/kinetic/share
-PYTHONPATH=/home/aa/an_env/devel/lib/python3/dist-packages:/home/aa/image_transport_ws/devel/lib/python2.7/dist-packages:/opt/ros/kinetic/lib/python2.7/dist-packages:/home/aa/tensorflow/models/research:/home/aa/tensorflow/models/research/slim:/opt/ros/kinetic/lib/python2.7/dist-packages/:/home/aa/an_env
+
+after that when you want run a script you must edit its run configurations ( click dropdown box to the left of run icon
+in upper right corner) pick envfile tab, add env file to be loaded before start

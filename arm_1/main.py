@@ -1,5 +1,5 @@
-from arm_1.robot.robot import Robot
-from arm_1.task.manager import TaskManager
+from .robot.robot import Robot
+from .task.manager import TaskManager
 
 
 class ArmRobot:

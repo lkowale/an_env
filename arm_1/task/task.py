@@ -18,6 +18,14 @@ class Task:
         pass
 
 
+class PeriodicTask(Task):
+
+    def __init__(self, name, robot, recurrent=False, frequency=20):
+        Task.__init__(name, robot, recurrent)
+        self.frequency = frequency
+    # todo in periodical task nedd to check if ferequency of call is fulfilled
+
+
 class LimbMove(Task):
 
     def __init__(self, name, robot, where_to):  # world position where_to
@@ -46,8 +54,9 @@ class MoveToInitialPosition(LimbMove):
         LimbMove.__init__(self, name, robot, where_to)
 
 
-class CladeObserver(Task):
+class CladeObserver(PeriodicTask):
 
     def update(self):
-        # todo describe path of clade occurences acquisition
-        self.robot.cognition.get_clade_aspects_occurrences("red_ball")
+        if self.ready:
+            # todo describe path of clade occurences acquisition
+            self.robot.cognition.get_clade_aspects_occurrences("red_ball")

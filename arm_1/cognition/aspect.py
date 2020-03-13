@@ -13,7 +13,7 @@ class Aspect:
         self.source = source
         self.name = self.source.name + '_' + self.aspect_rule.name
         self.occurrence_mask = []
-        # pd.DataFrame of contours found on occurance mask
+        # list of contours found on occurance mask
         self.contours = []
         self.aspect_occurrences = None
 
@@ -44,6 +44,7 @@ class CameraAspect(Aspect):
         bgr_colour = plain_frame[y, x]
         self.aspect_rule.set_colour(bgr_colour)
 
+    # remember to call find_contours() first
     def get_contours(self):
         return self.contours
 
