@@ -1,5 +1,5 @@
 from ..initialization import *
-
+from time import time
 
 # todo robot should launch service that informs what kind of tasks its performs
 # to be performed by robot, so the can be listed and picked by user form tasks list
@@ -20,10 +20,19 @@ class Task:
 
 class PeriodicTask(Task):
 
-    def __init__(self, name, robot, recurrent=False, frequency=20):
+    def __init__(self, name, robot, recurrent=False, frequency_hz=20):
         Task.__init__(name, robot, recurrent)
-        self.frequency = frequency
+        self.frequency = frequency_hz
+        self.time_window = 1 / self.frequency
+        self.start_time = time()
     # todo in periodical task nedd to check if ferequency of call is fulfilled
+
+    def is_time_window_exceeded(self):
+        now = time()
+        if now - self.start_time > self.time_window:
+            return True
+        else:
+            return False
 
 
 class LimbMove(Task):
@@ -57,6 +66,6 @@ class MoveToInitialPosition(LimbMove):
 class CladeObserver(PeriodicTask):
 
     def update(self):
-        if self.ready:
+        if self.is_time_window_exceeded:
             # todo describe path of clade occurences acquisition
             self.robot.cognition.get_clade_aspects_occurrences("red_ball")

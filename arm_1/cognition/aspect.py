@@ -64,15 +64,12 @@ class ColourThresholdRule(AspectRule):
         self.LAB_threshold_lower = np.zeros((3,), dtype=int)
         self.LAB_threshold_upper = np.zeros((3,), dtype=int)
         self.colour_delta = 15
+        self.init_red()
 
     def apply_rule(self, raw_source_image):
         frame = cv2.GaussianBlur(raw_source_image, (5, 5), 0)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
-        colour_lower = self.LAB_threshold_colour - self.colour_delta
-        colour_lower[0] = 0
-        colour_upper = self.LAB_threshold_colour + self.colour_delta
-        colour_upper[0] = 255
-        frame = cv2.inRange(frame, colour_lower, colour_upper)
+        frame = cv2.inRange(frame, self.LAB_threshold_lower, self.LAB_threshold_upper)
         frame = cv2.erode(frame, None, iterations=2)
         frame = cv2.dilate(frame, None, iterations=2)
         return frame
@@ -80,6 +77,19 @@ class ColourThresholdRule(AspectRule):
     def set_colour_delta(self, value):
         self.colour_delta = value
 
+    # parameter BGR_colour is a list of int values [b,g,r]
     def set_colour(self, BGR_colour):
-        self.BGR_treshold_colour = BGR_colour
-        self.LAB_treshold_colour = cv2.cvtColor(np.uint8([[BGR_colour]]), cv2.COLOR_BGR2LAB).ravel()
+        self.BGR_treshold_colour[0] = BGR_colour
+        self.LAB_threshold_colour = cv2.cvtColor(np.uint8([[BGR_colour]]), cv2.COLOR_BGR2LAB).ravel()
+        self.LAB_threshold_lower = self.LAB_threshold_colour - self.colour_delta
+        self.LAB_threshold_lower[0] = 0
+        self.LAB_threshold_upper = self.LAB_threshold_colour + self.colour_delta
+        self.LAB_threshold_upper[0] = 255
+
+    def init_red(self):
+        # upper_red, 15, 40, 29, 178, 99, 185, 162
+        # self.aspect_rule.colour_delta = data[1]
+        # self.aspect_rule.BGR_treshold_colour = np.array([data[2], data[3], data[4]])
+        # self.aspect_rule.LAB_treshold_colour = np.array([data[5], data[6], data[7]])
+        self.set_colour_delta(15)
+        self.set_colour([40, 29, 178])
