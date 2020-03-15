@@ -7,3 +7,5 @@ conda env remove -n ENV_NAME
 source activate myenv
 
 source deactivate
+
+conda install -n <env_name> <package>

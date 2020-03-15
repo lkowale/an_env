@@ -78,17 +78,13 @@ class Eye:
 class RosSubscriberEye(Eye):
 
     def __init__(self, name, source):
-        Eye.__init__(self, name, source)
+        super().__init__(name, source)
 
-        topic_name = '/vision/eye_' + self.name + '/image/compressed'
+        topic_name = '/camera_' + self.name + '/image/compressed'
         self.subscriber = rospy.Subscriber(topic_name, CompressedImage, self.subscriber_callback, queue_size=1)
 
     def subscriber_callback(self, ros_data):
         #### direct conversion to CV2 ####
         np_arr = np.fromstring(ros_data.data, np.uint8)
         self.raw_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        # image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR) # OpenCV >= 3.0:
 
-        # timer = cv2.getTickCount()
-        # self.plain_frame = self.camera.read()
-        # self. fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)

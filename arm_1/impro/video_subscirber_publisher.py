@@ -31,10 +31,10 @@ class image_feature:
         # self.bridge = CvBridge()
 
         # subscribed Topic
-        self.subscriber = rospy.Subscriber("/camera/image/compressed",
+        self.subscriber = rospy.Subscriber("/camera_side/image/compressed",
                                            CompressedImage, self.callback, queue_size=1)
         if VERBOSE:
-            print("subscribed to /camera/image/compressed")
+            print("subscribed to /camera_side/image/compressed")
 
     def callback(self, ros_data):
         '''Callback function of subscribed topic.

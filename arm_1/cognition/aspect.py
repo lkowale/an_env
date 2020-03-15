@@ -79,7 +79,7 @@ class ColourThresholdRule(AspectRule):
 
     # parameter BGR_colour is a list of int values [b,g,r]
     def set_colour(self, BGR_colour):
-        self.BGR_treshold_colour[0] = BGR_colour
+        self.BGR_threshold_colour = np.array(BGR_colour)
         self.LAB_threshold_colour = cv2.cvtColor(np.uint8([[BGR_colour]]), cv2.COLOR_BGR2LAB).ravel()
         self.LAB_threshold_lower = self.LAB_threshold_colour - self.colour_delta
         self.LAB_threshold_lower[0] = 0

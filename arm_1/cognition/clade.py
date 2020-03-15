@@ -52,7 +52,7 @@ class BaseObject(object):
     # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
     def get_aspects_occurrences(self):
         aspects_occurrences = {}
-        for aspect in self.aspects:
+        for aspect_name, aspect in self.aspects.items():
             # describe contours from each Aspect, put theme in dictionary
             aspects_occurrences[aspect.name] = self.get_aspect_occurrences(aspect.name)
         return aspects_occurrences
