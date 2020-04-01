@@ -29,19 +29,13 @@ class CameraAspect(Aspect):
 
     def __init__(self, aspect_rule, source):
         super().__init__(aspect_rule, source)
-        topic_name = "/camera_" + self.source.name + "/image/compressed_mouse_left"
-        self.subscriber = rospy.Subscriber(topic_name, Point, self.set_mask_colour, queue_size=1)
 
     def find_contours(self):
         # find contours on occurrence_mask
         cnts = cv2.findContours(self.occurrence_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         self.contours = cnts[1]
 
-    def set_mask_colour(self, ros_data):
-        x = ros_data.x
-        y = ros_data.y
-        plain_frame = self.source.plain_frame
-        bgr_colour = plain_frame[y, x]
+    def set_pulled_colour(self, bgr_colour):
         self.aspect_rule.set_colour(bgr_colour)
 
     # remember to call find_contours() first

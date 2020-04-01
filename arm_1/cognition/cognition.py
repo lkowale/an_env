@@ -80,8 +80,8 @@ class RosSubscriberEye(Eye):
     def __init__(self, name, source):
         super().__init__(name, source)
 
-        topic_name = '/camera_' + self.name + '/image/compressed'
-        self.subscriber = rospy.Subscriber(topic_name, CompressedImage, self.subscriber_callback, queue_size=1)
+        self.topic_name = '/camera_' + self.name + '/image/compressed'
+        self.subscriber = rospy.Subscriber(self.topic_name, CompressedImage, self.subscriber_callback, queue_size=1)
 
     def subscriber_callback(self, ros_data):
         #### direct conversion to CV2 ####

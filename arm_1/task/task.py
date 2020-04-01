@@ -1,6 +1,7 @@
 from ..initialization import *
 from time import time
 from sensor_msgs.msg import CompressedImage
+from geometry_msgs.msg import Point
 import numpy as np
 import cv2
 
@@ -32,6 +33,7 @@ class PeriodicTask(Task):
     def is_time_window_exceeded(self):
         now = time()
         if now - self.start_time > self.time_window:
+            self.start_time = time()
             return True
         else:
             return False
@@ -106,3 +108,30 @@ class MaskPublisher(PeriodicTask):
             # publish masks
             for publisher in self.publishers:
                 publisher.publish()
+
+
+class AspectSubscriber:
+
+    def __init__(self, aspect):
+        self.aspect = aspect
+        self.topic_name = self.aspect.source.topic_name + '_mouse_left'
+        self.subscriber = rospy.Subscriber(self.topic_name, Point, self.subscriber_callback, queue_size=1)
+
+    def subscriber_callback(self, ros_data):
+        x = int(ros_data.x)
+        y = int(ros_data.y)
+        plain_frame = self.aspect.source.raw_image
+        bgr_colour = plain_frame[y, x]
+        self.aspect.set_pulled_colour(bgr_colour)
+
+
+class AspectColourPicker(Task):
+
+    def __init__(self, name, robot):
+        super().__init__(name, robot)
+        self.subscribers = []
+        # get marker Clade
+        marker = self.robot.cognition.clades['red_ball']
+        # for each aspect of red marker create a subscriber
+        for aspect_name, aspect in marker.aspects.items():
+            self.subscribers.append(AspectSubscriber(aspect))
