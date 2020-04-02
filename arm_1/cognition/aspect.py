@@ -33,7 +33,8 @@ class CameraAspect(Aspect):
     def find_contours(self):
         # find contours on occurrence_mask
         cnts = cv2.findContours(self.occurrence_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        self.contours = cnts[1]
+        # list of contours is on first index of returned tuple
+        self.contours = cnts[0]
 
     def set_pulled_colour(self, bgr_colour):
         self.aspect_rule.set_colour(bgr_colour)

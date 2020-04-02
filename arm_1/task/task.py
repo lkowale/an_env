@@ -17,9 +17,6 @@ class Task:
         self.chain = []
         self.state = None
 
-    def update(self):
-        pass
-
 
 class PeriodicTask(Task):
 
@@ -37,6 +34,9 @@ class PeriodicTask(Task):
             return True
         else:
             return False
+
+    def update(self):
+        pass
 
 
 class LimbMove(Task):

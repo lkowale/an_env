@@ -25,7 +25,7 @@ class BaseObject(object):
     def __init__(self, name, aspects):
         self.name = name
         self.aspects = dictionary_from_list(aspects)
-        self.aspect_occurrences = pd.DataFrame()
+        self.aspect_occurrences = {}  # dictionary of aspects occurances {'aspect_name': df_of_described_contours}
         self.occurrences = pd.DataFrame()
 
     # def get_occurrences(self):
@@ -42,20 +42,21 @@ class BaseObject(object):
     # returns list of contours found on given aspects mask
     def get_aspect_occurrences(self, aspect_name):
         aspect = self.aspects[aspect_name]
-        # apply rules to source images
+        # apply rules to source images to make a mask of occurences
         aspect.apply_rule()
-        # get list of contours from a mask
+        # find contours on a mask
         aspect.find_contours()
-        # translate contours
-        return aspect.get_contours()
+        # translate contours - get dataframe of contours described by clade parameters
+        aspect_occurences = self.parametrize_contours(aspect.contours)
+        return aspect_occurences
 
     # returns dictionary of pd.DataFrames {aspect_name:DataFrame}
     def get_aspects_occurrences(self):
-        aspects_occurrences = {}
+        self.aspect_occurrences = {}
         for aspect_name, aspect in self.aspects.items():
             # describe contours from each Aspect, put theme in dictionary
-            aspects_occurrences[aspect.name] = self.get_aspect_occurrences(aspect.name)
-        return aspects_occurrences
+            self.aspect_occurrences[aspect.name] = self.get_aspect_occurrences(aspect.name)
+        return self.aspect_occurrences
 
     @classmethod
     def describe_contour(cls, contour):
@@ -67,14 +68,17 @@ class BaseObject(object):
 
     # returns dataframe of aspect contours parametrization
     @classmethod
-    def contours_to_dataframe(cls, contours_list):
+    def parametrize_contours(cls, contours_list):
         values = cls.contours_to_list(contours_list)
         df = pd.DataFrame(values, columns=cls.get_param_names())
         return df
 
     @classmethod
     def contours_to_list(cls, contours_list):
-        values = [cls.describe_contour(contour) for contour in contours_list]
+        if contours_list:
+            values = [cls.describe_contour(contour) for contour in contours_list]
+        else:
+            values = []
         return values
 
 
