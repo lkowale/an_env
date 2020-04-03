@@ -69,7 +69,8 @@ class MarkerRecorder(Task):
             # get rid of radius attribute
             aspect_occ = aspect_occ.drop('radius', 1)
             # change parameters name by adding aspect name
-            # todo
+            column_names = [key + column_name for column_name in aspect_occ.columns]
+            aspect_occ.columns = column_names
             # for each aspect occurence extract one and add it to dictionary
         return None
 

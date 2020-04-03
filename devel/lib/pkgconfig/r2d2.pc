@@ -4,5 +4,5 @@ Name: r2d2
 Description: Description of r2d2
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/aa/an_env/devel/lib 
+Libs: -L${prefix}/lib 
 Requires: 

@@ -1,0 +1,23 @@
+<library path="src">
+  <class name="MarkerRecorder Plugin" type="rqt_marker_recorder.arm1_module.MRPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      An rqt GUI for interact with arm1 MarkerRecorder task.
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <group>
+        <label>Arm1</label>
+      </group>
+      <label>Marker Recorder</label>
+      <icon type="theme">system-help</icon>
+      <statustip>Great user interface to provide real value.</statustip>
+    </qtgui>
+  </class>
+</library>
