@@ -18,6 +18,7 @@ print(df3.to_string())
 
 print(df3.iloc[0]['A'])
 
-for param in list(df3.columns.values):
+for param in list(df3.columns.values)\
+        :
     print(f' {param}')
 
