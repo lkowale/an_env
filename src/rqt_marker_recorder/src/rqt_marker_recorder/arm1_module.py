@@ -39,9 +39,13 @@ class MRPlugin(Plugin):
         if context.serial_number() > 1:
             self._widget.setWindowTitle(self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         # widgets init
-        self._widget.btn_test.clicked.connect(self._clicked_btn_test)
+        self._widget.btn_start.clicked.connect(self._clicked_btn_start)
+        self._widget.btn_point_set.clicked.connect(self._clicked_btn_point_set)
         # Add widget to the user interface
         context.add_widget(self._widget)
+        # ROS
+        self.subscribers = [rospy.Subscriber('marker_recorder/marker_new_point', String, self._new_point),
+                            rospy.Subscriber('marker_recorder/marker_readings', String, self._readings)]
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
@@ -57,10 +61,21 @@ class MRPlugin(Plugin):
         # v = instance_settings.value(k)
         pass
 
-    def _clicked_btn_test(self):
-        pub = rospy.Publisher("marker_rekorder/btn", String, queue_size=10)
-        pub.publish('hello_str')
+    def _clicked_btn_start(self):
+        pub = rospy.Publisher("marker_recorder/btn_start", String, queue_size=10)
+        pub.publish('clicked_btn_start')
+
+    def _clicked_btn_point_set(self):
+        pub = rospy.Publisher("marker_recorder/btn_point_set", String, queue_size=10)
+        pub.publish('clicked_btn_point_set')
+
     #def trigger_configuration(self):
         # Comment in to signal that the plugin has a way to configure
         # This will enable a setting button (gear icon) in each dock widget title bar
         # Usually used to open a modal configuration dialog
+
+    def _new_point(self, msg):
+        self._widget.l_new_point.setText(msg.data)
+
+    def _readings(self, msg):
+        self._widget.l_readings.setText(msg.data)

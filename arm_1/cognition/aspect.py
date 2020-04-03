@@ -58,7 +58,7 @@ class ColourThresholdRule(AspectRule):
         self.LAB_threshold_colour = np.zeros((3,), dtype=int)
         self.LAB_threshold_lower = np.zeros((3,), dtype=int)
         self.LAB_threshold_upper = np.zeros((3,), dtype=int)
-        self.colour_delta = 15
+        self.colour_delta = 10
         self.init_red()
 
     def apply_rule(self, raw_source_image):
