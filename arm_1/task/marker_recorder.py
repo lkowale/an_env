@@ -1,27 +1,28 @@
-from .task import Task
+from .task import PeriodicTask
 import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import Point
 import pandas as pd
 
 
-# messasge driven task
-class MarkerRecorder(Task):
+# synchronous task
+class MarkerRecorder(PeriodicTask):
 
     def __init__(self, name, robot):
         super().__init__(name, robot)
         self.states = ['ready', 'next_position', 'marker_record', 'ended']
         self.state = 'ready'
         # self.position = MarkerPositions(range(0, 500, 100), range(0, 400, 100), [355, 255, 155, 55])
-        self.position = MarkerPositions(range(0, 100, 100), range(0, 100, 100), [230, 130, 30])
+        self.position = MarkerPositions(range(0, 500, 100), range(0, 400, 100), [230, 130, 30])
         self.file_name = 'marker_recorder_data.csv'
-        self.readings_data = []
-        self.current_position = []
+        self.readings_data = pd.DataFrame()
+        self.current_position = [0, 0, 0]
         # ROS
         self.subscribers = [rospy.Subscriber('marker_recorder/btn_start', String, self.start_button),
                             rospy.Subscriber('marker_recorder/btn_point_set', String, self.onplace_button)]
         self.point_publisher = rospy.Publisher('marker_recorder/marker_new_point', String, queue_size=1)
         self.readings_publisher = rospy.Publisher('marker_recorder/marker_readings', String, queue_size=1)
+        self.aspects_publisher = rospy.Publisher('marker_recorder/marker_aspects', String, queue_size=1)
         self.point = Point()
 
     def start_button(self, msg):
@@ -62,7 +63,7 @@ class MarkerRecorder(Task):
         # send readings to rqt
         # message compose of first row of readings_data
         msg = ''
-        for param in self.readings_data.columns:
+        for param in t_readings:
             msg = msg + f" {param}:{t_readings.iloc[0][param]}"
         self.readings_publisher.publish(msg)
 
@@ -70,7 +71,8 @@ class MarkerRecorder(Task):
         # save local readings to file
         with open(self.file_name, 'w') as file:
             self.readings_data.to_csv(file, index=False)
-        pass
+        end_publisher = self.point_publisher
+        end_publisher.publish('Done')
 
     # prepare data to be saved
     def translate_readings(self, readings):
@@ -90,6 +92,21 @@ class MarkerRecorder(Task):
             clade_occurence = pd.concat([clade_occurence, aspect_occ], axis=1)
             # for each aspect occurence extract one and add it to dictionary
         return clade_occurence
+
+    def update(self):
+        if self.is_time_window_exceeded() and self.state == 'next_position':
+            self.publish_aspects()
+
+    def publish_aspects(self):
+        # dataframe describes contours with clade specific parameters
+        readings = self.robot.cognition.get_clade_aspects_occurrences("red_ball")
+        # assume that clade has only and at least one occurance on each aspect
+        t_readings = self.translate_readings(readings)
+        # message compose of first row of readings_data
+        msg = ''
+        for param in t_readings:
+            msg = msg + f" {param}:{t_readings.iloc[0][param]}"
+        self.aspects_publisher.publish(msg)
 
 
 class MarkerPositions:

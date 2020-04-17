@@ -11,9 +11,10 @@ class TaskManager:
     def __init__(self, robot):
         self.robot = robot
         self.synchronous_tasks = {'red_ball_observer': CladeObserver('red_ball_observer', self.robot, frequency_hz=20, start_delay=1),
-                      'mask_publisher': MaskPublisher('mask_publisher', self.robot, frequency_hz=20, start_delay=2)}
+                      'mask_publisher': MaskPublisher('mask_publisher', self.robot, frequency_hz=20, start_delay=2)
+                                  ,'marker_recorder': MarkerRecorder('marker_recorder', robot)}
         self.message_driven_tasks = {'asp_colpicker': AspectColourPicker('asp_colpicker', robot)
-                                     ,'marker_recorder': MarkerRecorder('marker_recorder', robot)
+
                                      }
 
     def main_loop(self):

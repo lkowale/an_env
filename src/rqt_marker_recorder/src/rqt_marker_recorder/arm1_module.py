@@ -45,7 +45,8 @@ class MRPlugin(Plugin):
         context.add_widget(self._widget)
         # ROS
         self.subscribers = [rospy.Subscriber('marker_recorder/marker_new_point', String, self._new_point),
-                            rospy.Subscriber('marker_recorder/marker_readings', String, self._readings)]
+                            rospy.Subscriber('marker_recorder/marker_readings', String, self._readings),
+                            rospy.Subscriber('marker_recorder/marker_aspects', String, self._aspects)]
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
@@ -79,3 +80,6 @@ class MRPlugin(Plugin):
 
     def _readings(self, msg):
         self._widget.l_readings.setText(msg.data)
+
+    def _aspects(self, msg):
+        self._widget.l_current_readings.setText(msg.data)
