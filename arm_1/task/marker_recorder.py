@@ -12,7 +12,8 @@ class MarkerRecorder(Task):
         super().__init__(name, robot)
         self.states = ['ready', 'next_position', 'marker_record', 'ended']
         self.state = 'ready'
-        self.position = MarkerPositions(range(0, 500, 100), range(0, 400, 100), [355, 255, 155, 55])
+        # self.position = MarkerPositions(range(0, 500, 100), range(0, 400, 100), [355, 255, 155, 55])
+        self.position = MarkerPositions(range(0, 100, 100), range(0, 100, 100), [230, 130, 30])
         self.file_name = 'marker_recorder_data.csv'
         self.readings_data = []
         self.current_position = []
@@ -60,23 +61,26 @@ class MarkerRecorder(Task):
         self.readings_data = pd.concat([self.readings_data, t_readings])
         # send readings to rqt
         # message compose of first row of readings_data
-        # ['upper_red_c_x', 'upper_red_c_y', 'side_red_c_x', 'side_red_c_y']
         msg = ''
         for param in self.readings_data.columns:
             msg = msg + f" {param}:{t_readings.iloc[0][param]}"
-        # msg = f"upper {rd.iloc[0]['upper_red_c_x']}{}{}"
-        # msg = "upper"
         self.readings_publisher.publish(msg)
 
     def save_readings(self):
         # save local readings to file
-        #todo
+        with open(self.file_name, 'w') as file:
+            self.readings_data.to_csv(file, index=False)
         pass
 
     # prepare data to be saved
     def translate_readings(self, readings):
         # translate dictionary of dataframes to one row dataframe
-        clade_occurence = pd.DataFrame()
+        # first add current poin position
+        cp = self.current_position
+        clade_occurence = pd.DataFrame({'x': [cp[0]],
+                                        'y': [cp[1]],
+                                        'z': [cp[2]]})
+        # do it for each eye
         for key, aspect_occ in readings.items():
             # get rid of radius attribute
             aspect_occ = aspect_occ.drop('radius', 1)
