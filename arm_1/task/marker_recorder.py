@@ -80,7 +80,7 @@ class MarkerRecorder(Task):
         clade_occurence = pd.DataFrame({'x': [cp[0]],
                                         'y': [cp[1]],
                                         'z': [cp[2]]})
-        # do it for each eye
+        # for each eye aspect take readings add theme to final readings dataframe
         for key, aspect_occ in readings.items():
             # get rid of radius attribute
             aspect_occ = aspect_occ.drop('radius', 1)
