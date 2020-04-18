@@ -1,0 +1,18 @@
+11.06
+digging into model_128_3_b4
+after doing validation curve it appearas its overfitting as well
+ahould be doing some regularization
+12.06
+looking at validation vizualistaion model selection 12.06.2019_0/Figure_1.png for validation mae is still 10 worse than learn
+even after adding kernel_regularizer=regularizers.l2(0.001) to first layer
+13.06
+decided for 64x64 mlp with regularization and 5000 epochs, want to see validation curve
+its valiation curve is rising after 500 epoch for model with or without regularization.
+model without has best (but still not the best) score than those with regularization or dropout in range form 0.5 to 0.05
+
+changed activation func from relu to elu helped
+
+cheking different activation functions on 32_32 model - the best on 1000 epochs is softplus
+
+after doing validation curve it seems a good choise - training and validation curves are close together, although
+mae validation curve starts rising after 2200 epoch
