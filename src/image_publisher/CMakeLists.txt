@@ -34,6 +34,9 @@ add_library(resized_publisher src/manifest.cpp src/resized_publisher.cpp src/res
 add_dependencies(resized_publisher ${catkin_EXPORTED_TARGETS} ${${PROJECT_NAME}_EXPORTED_TARGETS})
 target_link_libraries(resized_publisher ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
+add_executable(simple_pub src/simple_pub.cpp)
+target_link_libraries(simple_pub ${catkin_LIBRARIES})
+add_dependencies(simple_pub visualize)
 
 # Mark executables and/or libraries for installation
 install(TARGETS my_publisher my_subscriber resized_publisher

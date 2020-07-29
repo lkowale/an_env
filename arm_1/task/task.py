@@ -1,4 +1,5 @@
 from ..initialization import *
+from ..model.kerasmodel import KerasModel
 from time import time
 from sensor_msgs.msg import CompressedImage
 from geometry_msgs.msg import Point
@@ -27,6 +28,14 @@ class PeriodicTask(Task):
         # delay start by 1 sec
         self.start_time = time() + start_delay
 
+    def _check_time(update_func):
+        def decorator(self):
+            if self.is_time_window_exceeded():
+                self.update()
+            else:
+                pass
+        return decorator
+
     def is_time_window_exceeded(self):
         now = time()
         if now - self.start_time > self.time_window:
@@ -35,6 +44,7 @@ class PeriodicTask(Task):
         else:
             return False
 
+    @_check_time
     def update(self):
         pass
 
@@ -135,3 +145,12 @@ class AspectColourPicker(Task):
         # for each aspect of red marker create a subscriber
         for aspect_name, aspect in marker.aspects.items():
             self.subscribers.append(AspectSubscriber(aspect))
+
+
+class ModelSaver(Task):
+    def __init__(self, name, robot):
+        super().__init__(name, robot)
+        model = KerasModel('model_64x64_b4_e2000_p2')
+        model.build_pipeline()
+        model.train()
+        model.save()

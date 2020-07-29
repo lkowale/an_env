@@ -10,6 +10,7 @@ from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.externals import joblib
+from arm_1.model.kerasmodel import KerasModel
 
 start_time = time.time()
 
@@ -46,6 +47,7 @@ estimators.append(('regresor', KerasRegressor(build_fn=model_base, epochs=2000, 
 pipeline = Pipeline(estimators)
 
 pipeline.fit(X, Y)
+
 # model_name = 'model_32x32_b4_e2200'
 model_name = 'model_64x64_b4_e2000_p2'
 model_file_name = model_name + '.h5'
